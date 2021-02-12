@@ -49,6 +49,13 @@ exports.create = async (req, res) => {
     });
     return;
   }
+  var regex = new RegExp('^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$');
+  if (!regex.test(req.body.password)) {
+    res.status(400).send({
+      message: "Password should conatin atleat 8 characters, 3 lowercase, 2 uppercase, 1 special character (!@#$&*) and 2 numerals"
+    });
+    return;
+  }
 
   // hash the password provided by the user with bcrypt so that
   // we are never storing plain text passwords. This is crucial
@@ -72,6 +79,12 @@ exports.create = async (req, res) => {
     })
   })
     .catch(err => {
+      if(err.message == "Validation error: Validation isEmail on username failed"){
+        res.status(400).send({
+          message : "Email should be of format a@a.com"
+        });
+        return;
+      }
       res.status(500).send({
         message:
           err.message || "Error occurred while creating the user."
@@ -80,25 +93,25 @@ exports.create = async (req, res) => {
 };
 
 // Retrieve all Users from the database.
-exports.findAll = (req, res) => {
-    Users.findAll()
-      .then(data => {
-        res.status(200).json({
-          id: data[0].id,
-          firstname: req.body.firstname,
-          lastname: req.body.lastname,
-          username: req.body.username,
-          createdAt: data[0].createdAt,
-          updatedAt: data[0].updatedAt
-        });
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Error occurred while retrieving users."
-        });
-      });
-};
+// exports.findAll = (req, res) => {
+//     Users.findAll()
+//       .then(data => {
+//         res.status(200).json({
+//           id: data[0].id,
+//           firstname: req.body.firstname,
+//           lastname: req.body.lastname,
+//           username: req.body.username,
+//           createdAt: data[0].createdAt,
+//           updatedAt: data[0].updatedAt
+//         });
+//       })
+//       .catch(err => {
+//         res.status(500).send({
+//           message:
+//             err.message || "Error occurred while retrieving users."
+//         });
+//       });
+// };
 
 exports.login = async (req, res) => {
   const username = req.body.username;
@@ -176,14 +189,13 @@ exports.myAccount = (req, res) => {
     });
   }
   res.status(404).send(
-    { errors: [{ message: 'missing auth token' }] }
+    { errors: [{ message: 'No user is logged in.' }] }
   );
 };
 
 // Find a single user with a username
 exports.findOne = (req, res) => {
   const username = req.params.username;
-
   Users.findByPk(username)
     .then(data => {
       res.status(200).json(data);
@@ -196,42 +208,45 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Tutorial by the id in the request
-exports.update = (req, res) => {
-  const username = req.params.username;
-  if(req.body.username){
-    res.status(400).send({
-      message: "UserName cannot be updated!"
-    });
-    return;
-  }
-  var salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(req.body.password, salt);
-  req.body.password = hash
-  Users.update(req.body, {
-    where: { username: username }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.status(200).json({
-          message: `User was updated successfully with username=${username}`,
-        });
-      } else {
-        res.send({
-          message: `Cannot update user with username=${username}. Maybe user was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating User with username=" + username
+exports.update = async (req, res) => {
+  if (req.user) {
+    const username = req.user.username;
+    if(req.body.username){
+      res.status(400).send({
+        message: "UserName cannot be updated!"
       });
-    });
+      return;
+    }
+    var salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+    req.body.password = hash
+    await Users.update(req.body, {
+      where: { username: username }
+    }).then(num => {
+        if (num == 1) {
+          res.status(200).json({
+            message: `User was updated successfully with username=${username}`,
+          });
+        } else {
+          res.send({
+            message: `Cannot update user with username=${username}. Maybe user was not found or req.body is empty!`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error updating User with username=" + username
+        });
+      });
+  }
+  res.status(404).send(
+    { errors: [{ message: 'User must login to update details' }] }
+  );
 };
 
 // Delete a User with the specified username
 exports.delete = (req, res) => {
   const username = req.params.username;
-
   Users.destroy({
     where: { username: username }
   })
@@ -258,8 +273,7 @@ exports.deleteAll = (req, res) => {
   Users.destroy({
     where: {},
     truncate: false
-  })
-    .then(nums => {
+  }).then(nums => {
       res.send({ message: `${nums} Users were deleted successfully!` });
     })
     .catch(err => {

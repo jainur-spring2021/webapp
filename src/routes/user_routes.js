@@ -15,13 +15,13 @@ module.exports = app => {
     router.get('/myaccount', users.myAccount);
   
     // Retrieve all users
-    router.get("/", users.findAll);
+    //router.get("/", users.findAll);
   
     // Retrieve a single user with username
-    router.get("/:username", users.findOne);
+    //router.get("/:username", users.findOne);
   
     // Update a user with username
-    router.put("/:username", users.update);
+    router.put("/updateAccount", users.update);
   
     // Delete a user with username
     router.delete("/:username", users.delete);

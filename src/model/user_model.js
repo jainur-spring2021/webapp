@@ -18,9 +18,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         username: {
             type: Sequelize.STRING,
-            unique: {
-                args: true
-            },
+            unique: true,
             allowNull: false,
             validate: {
                 isEmail: true,
@@ -29,7 +27,6 @@ module.exports = (sequelize, Sequelize) => {
         password: {
             type: Sequelize.STRING,
             allowNull: false,
-            is: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
         },
     });
 
@@ -76,5 +73,7 @@ module.exports = (sequelize, Sequelize) => {
         // destroy the auth token record that matches the passed token
         sequelize.models.AuthToken.destroy({ where: { token } });
     };
+
+    
     return User;
 };
