@@ -114,6 +114,7 @@ exports.login = async (req, res) => {
 
   try {
     let user = await Users.authenticate(username, password)
+     res.cookie("auth_token", user.authToken);
     return res.status(200).json({
       user :{
         id: user.user.id,
@@ -148,7 +149,10 @@ exports.logout = async (req, res) => {
   // the authToken should be missing at this point, check anyway
   if (user && authToken) {
     await req.user.logout(authToken);
-    return res.status(204).send()
+    res.clearCookie("auth_token");
+    return res.status(200).send({
+      message: "User logged out successfully!"
+    })
   }
 
   // if the user missing, the user is not logged in, hence we
@@ -162,7 +166,14 @@ exports.logout = async (req, res) => {
 //User Account Details
 exports.myAccount = (req, res) => {
   if (req.user) {
-    return res.send(req.user);
+    return res.status(200).json({
+      id : req.user.id,
+      firstname : req.user.firstname,
+      lastname: req.user.lastname,
+      username: req.user.username,
+      account_created : req.user.createdAt,
+      account_updated : req.user.updatedAt
+    });
   }
   res.status(404).send(
     { errors: [{ message: 'missing auth token' }] }
