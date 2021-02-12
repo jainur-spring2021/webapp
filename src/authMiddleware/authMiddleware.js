@@ -1,27 +1,33 @@
-const { User, AuthToken }  = require('../model');
-
+const db  = require('../model');
+const Users = db.users;
+const AuthToken = db.auth;
 
 module.exports = async function(req, res, next) {
 
   // look for an authorization header or auth_token in the cookies
-  const token =
+  const auth_token =
     req.cookies.auth_token || req.headers.authorization;
 
   // if a token is found we will try to find it's associated user
   // If there is one, we attach it to the req object so any
   // following middleware or routing logic will have access to
   // the authenticated user.
-  if (token) {
-
+  if (auth_token) {
     // look for an auth token that matches the cookie or header
-    const authToken = await AuthToken.find(
-      { where: { token }, include: User }
+    var token = auth_token.token;
+    const authToken = await AuthToken.findOne(
+      { where: { token}}
     );
+    //console.log(authToken);
 
     // if there is an auth token found, we attach it's associated
     // user to the req object so we can use it in our routes
     if (authToken) {
-      req.user = authToken.User;
+      var username  = authToken.username;
+      const user = await Users.findOne(
+        {where : {username}}
+      );
+      req.user = user;
     }
   }
   next();
