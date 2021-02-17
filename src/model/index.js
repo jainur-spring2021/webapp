@@ -22,5 +22,6 @@ db.sequelize = sequelize;
 
 db.users = require("./user_model.js")(sequelize, Sequelize);
 db.auth = require("./auth_token.js")(sequelize, Sequelize.DataTypes);
+db.books = require("./books_model.js")(sequelize, Sequelize);
 
 module.exports = db;

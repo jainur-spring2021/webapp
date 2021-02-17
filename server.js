@@ -1,10 +1,9 @@
 let express = require('express'),
     app = express(),
     PORT = process.env.PORT || 3000,
-    //Sequelize = require ('sequelize'),
     bodyParser = require('body-parser'),
     routes = require('./src/routes/user_routes'),
-    db = require('./src/model'),
+    //db = require('./src/model'),
     authMiddleware = require('./src/authMiddleware/authMiddleware'),
     cookieParser = require('cookie-parser');
 
