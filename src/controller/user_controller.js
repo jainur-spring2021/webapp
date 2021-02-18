@@ -145,9 +145,35 @@ exports.update = async (req, res) => {
         return;
       }
       if(req.body.password){
+        var regex = new RegExp('^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$');
+        if (!regex.test(req.body.password)) {
+          return res.status(400).send({
+            message: 
+            "Password should conatin atleat 8 characters, 3 lowercase, 2 uppercase, 1 special character (!@#$&*) and 2 numerals"
+          });
+        }
         var salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(req.body.password, salt);
         req.body.password = hash;
+      }
+      
+      if (req.body.firstname) {
+        var regex = new RegExp('^[A-Za-z]+$');
+        if (!regex.test(req.body.firstname)) {
+          res.status(400).send({
+            message: "FirstName can contain only alphabets"
+          });
+          return;
+        }
+      }
+      if (req.body.lastname) {
+        var regex = new RegExp('^[A-Za-z]+$');
+        if (!regex.test(req.body.lastname)) {
+          res.status(400).send({
+            message: "Lastname can contain only alphabets"
+          });
+          return;
+        }
       }
       await Users.update(req.body, { where: { username: user.username }})
       .then(num => {
