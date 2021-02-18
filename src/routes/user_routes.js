@@ -16,13 +16,13 @@ module.exports = app => {
     router.post("/book", books.create);
 
     // Get book by id
-    //router.get('/book/{id}', books.getById);
+    router.get('/book/:id', books.getById);
 
     // Get all books
-    //router.get('/book', books.getAllBooks);
+    router.get('/book', books.getAllBooks);
 
     // Delete book by id
-    //router.delete('/book/{id}', books.deleteById);
+    router.delete('/book/:id', books.deleteById);
 
 
     app.use('/api/', router);
