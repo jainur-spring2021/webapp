@@ -1,8 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
     const Book = sequelize.define("book", {
         id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
+            type: Sequelize.UUID,
             primaryKey: true,
             noUpdate: true
         },
@@ -17,14 +16,13 @@ module.exports = (sequelize, Sequelize) => {
         isbn: {
             type: Sequelize.STRING,
             unique: true,
-            allowNull: false,
-            validate: {
-                isEmail: true,
-            }
+            allowNull: false
         },
         published_date: {
-            type: Sequelize.STRING,
+            type: Sequelize.DATE,
             allowNull: false,
         }
     });
+
+    return Book;
 }
