@@ -29,6 +29,14 @@ exports.create = async (req, res) => {
       return;
     }
 
+    var regex = new RegExp('^[A-Za-z]+$');
+    if (!regex.test(req.body.author)) {
+      res.status(400).send({
+        message: "Author name can contain only alphabets"
+      });
+      return;
+    }
+
     if (!req.body.isbn) {
       res.status(400).send({
         message: "ISBN can not be empty!"
@@ -59,10 +67,15 @@ exports.create = async (req, res) => {
       })
     })
     .catch(err => {
-      res.status(400).send({
-        message:
-          err.message || "Error occurred while creating the book."
-      });
+      if(err.message == "Validation error"){
+        return res.status(400).send({
+          message : "Book with this isbn aslready exists"
+        });
+      }else{
+        return res.status(400).send({
+          message: err.message || "Error occurred while creating the user."
+        });
+      }
     });
 };
 
@@ -112,11 +125,9 @@ exports.deleteById = async (req, res) => {
     }
     const user = await User.authenticate(req, res);
     if(user){
-      const book = await Books.findOne(
-        {where: {id : id, userId: "2"}});
+      const book = await Books.findOne({where: {id: id, userId: user.id}});
       if(book){
-        await Books.destroy(
-          {where: {id : id, userId: user.id}});
+        await Books.destroy({where: {id: id, userId: user.id}});
         return res.status(200).send({
           message : "Book deleted successfully!!"
         });
