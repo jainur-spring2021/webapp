@@ -1,7 +1,7 @@
 # webapp
 
 # Prerequisites for building and deploying your application locally.
-Step 1: Install Visual Studio, Node.js, npm , Postman and Git bash
+Install Visual Studio, Node.js, npm , Postman and Git bash
 
 # Build and Deploy instructions for web application.
 Step 1: Clone git repository and run 'npm init' to intialize the repository.\
@@ -10,11 +10,13 @@ Step 3: Before starting the node server, start Mysql services.\
 Step 4: Run 'node server.js to start the server'\
 Step 5: Start Postman and hit the enpoints:\
 
-Endpoints:
-GET localhost:3000/api/users/myaccount \
-POST localhost:3000/api/users/ \
-POST localhost:3000/api/users/login \
-PUT localhost:3000/api/users/:username   \
-DELETE localhost:3000/api/users/:username \
-DELETE  localhost:3000/api/users/logout \
-DELETE  localhost:3000/api/users/ \
+# Assignment 1 Endpoints:
+POST localhost:3000/api/users \
+GET localhost:3000/api/users/userAcc \
+PUT localhost:3000/api/users/updateAccount
+
+# Assignment 2 endpoints
+POST  localhost:3000/api/book \
+GET   localhost:3000/api/book/:id \
+GET   localhost:3000/api/book \
+DELETE    localhost:3000/api/book/:id 
