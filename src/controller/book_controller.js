@@ -65,3 +65,70 @@ exports.create = async (req, res) => {
       });
     });
 };
+
+exports.getById = async (req, res) => {  
+  try {
+    const book = await Books.findByPk(req.params.id);
+    if(book){
+      return res.status(200).json({
+        book :{
+          id: book.id,
+          title: book.title,
+          author: book.author,
+          isbn: book.isbn,
+          published_date : book.published_date,
+          book_created: book.createdAt,
+          userId: book.userId
+        }
+      });
+    }else{
+      return res.status(404).send(`No Book found for this id ${book.userId}`);
+    }
+  } catch (err) {
+    return res.status(400).send('Error while extracting books.');
+  }
+};
+
+exports.getAllBooks = async (req, res) => {  
+  try {
+    const book = await Books.findAll();
+    if(book){
+      return res.status(200).json(book);
+    }else{
+      return res.status(404).send(`No Books found`);
+    }
+  } catch (err) {
+    return res.status(400).send('Error while extracting books.');
+  }
+};
+
+exports.deleteById = async (req, res) => {
+  try{
+    const id = req.params.id;
+    if(!req.headers.authorization){
+      return res.status(401).send({
+        message : "Unauthorized Access"
+      })
+    }
+    const user = await User.authenticate(req, res);
+    if(user){
+      const book = await Books.findOne(
+        {where: {id : id, userId: "2"}});
+      if(book){
+        await Books.destroy(
+          {where: {id : id, userId: user.id}});
+        return res.status(200).send({
+          message : "Book deleted successfully!!"
+        });
+      }else{
+        return res.status(404).send({
+          message : "No such Book exists."
+        });
+      }
+    }
+  }catch(err){
+    res.status(400).send({
+      message : err.message || `Error occurred while deleting book by id: ${id}`
+    });
+  }
+};
