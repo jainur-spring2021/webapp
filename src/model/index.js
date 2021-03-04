@@ -22,7 +22,9 @@ db.sequelize = sequelize;
 
 db.users = require("./user_model.js")(sequelize, Sequelize);
 db.books = require("./books_model.js")(sequelize, Sequelize);
+db.images = require("./image_model.js")(sequelize, Sequelize);
 
 db.users.associate(db.books);
+db.books.associate(db.images);
 
 module.exports = db;

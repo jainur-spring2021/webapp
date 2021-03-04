@@ -24,5 +24,11 @@ module.exports = (sequelize, Sequelize) => {
         }
     });
 
+    // set up the associations so we can make queries that include the related objects
+    Book.associate = function (images) {
+        Book.hasMany(images);
+    };
+
     return Book;
-}
+};
+
