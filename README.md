@@ -16,7 +16,11 @@ GET localhost:3000/api/users/userAcc \
 PUT localhost:3000/api/users/updateAccount
 
 # Assignment 2 endpoints
-POST  localhost:3000/api/book \
-GET   localhost:3000/api/book/:id \
-GET   localhost:3000/api/book \
-DELETE    localhost:3000/api/book/:id 
+POST  localhost:3000/api/books \
+GET   localhost:3000/api/books/:id \
+GET   localhost:3000/api/books \
+DELETE    localhost:3000/api/books/:id 
+
+# Assignment 4 endpoints
+POST  localhost:3000/api/books/:id/images \
+DELETE    localhost:3000/api/books/:bookId/images/:imageId
