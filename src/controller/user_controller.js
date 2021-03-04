@@ -1,3 +1,4 @@
+const UUID = require('uuid');
 const db  = require('../model');
 const Users = db.users;
 const Op = db.Sequelize.Op;
@@ -80,6 +81,7 @@ exports.create = async (req, res) => {
   var salt = bcrypt.genSaltSync(10);
   const hash = bcrypt.hashSync(req.body.password, salt);
   const user = {
+    id : UUID.v1(),
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     username: req.body.username,
@@ -90,7 +92,15 @@ exports.create = async (req, res) => {
   await Users.create(user)
     .then(user => {
       res.status(200).json({
-          message :  `User created successfully with username: ${user.username}`
+          message :  `User created successfully with username: ${user.username}`,
+          user : {
+            id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            username: user.username,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt
+          }
       })
     })
     .catch(err => {
@@ -180,6 +190,7 @@ exports.update = async (req, res) => {
           if (num == 1) {
             res.status(200).json({
               message: `User was updated successfully with username = ${user.username}`,
+              user : user
             });
           } else {
             res.status(400).send({

@@ -1,6 +1,7 @@
 module.exports = app => {
     const users = require("../controller/user_controller.js");
     const books = require("../controller/book_controller.js");
+    const images = require("../controller/image_controller.js");
     var router = require("express").Router();
   
     // Create a new user
@@ -13,17 +14,22 @@ module.exports = app => {
     router.put("/users/updateAccount", users.update);
 
     // Create new book
-    router.post("/book", books.create);
+    router.post("/books", books.create);
 
     // Get book by id
-    router.get('/book/:id', books.getById);
+    router.get('/books/:id', books.getById);
 
     // Get all books
-    router.get('/book', books.getAllBooks);
+    router.get('/books', books.getAllBooks);
 
     // Delete book by id
-    router.delete('/book/:id', books.deleteById);
+    router.delete('/books/:id', books.deleteById);
 
+    // Post an image 
+    router.post("/books/:id/image", images.uploadImage);
+
+    //Delete an image
+    router.delete("/books/:bookId/image/:imageId", images.deleteImage);
 
     app.use('/api/', router);
   };
