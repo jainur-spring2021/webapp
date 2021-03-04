@@ -4,8 +4,7 @@ const atob = require('atob');
 module.exports = (sequelize, Sequelize) => {
     const User = sequelize.define("user", {
         id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
+            type: Sequelize.UUID,
             primaryKey: true,
             noUpdate: true
         },

@@ -2,6 +2,9 @@ const UUID = require('uuid');
 const db  = require('../model');
 const Books = db.books;
 const User = db.users;
+const Images = db.images;
+const config = require("../db_details/db.config.js");
+const aws = require('aws-sdk');
 
 // Create a new book
 exports.create = async (req, res) => {
@@ -63,7 +66,8 @@ exports.create = async (req, res) => {
     Books.create(book)
     .then(book => {
       res.status(200).json({
-          message :  `Book created successfully with title: ${book.title}`
+          message :  `Book created successfully with title: ${book.title}`,
+          book: book
       })
     })
     .catch(err => {
@@ -84,15 +88,7 @@ exports.getById = async (req, res) => {
     const book = await Books.findByPk(req.params.id);
     if(book){
       return res.status(200).json({
-        book :{
-          id: book.id,
-          title: book.title,
-          author: book.author,
-          isbn: book.isbn,
-          published_date : book.published_date,
-          book_created: book.createdAt,
-          userId: book.userId
-        }
+        book : book 
       });
     }else{
       return res.status(404).send(`No Book found for this id ${book.userId}`);
@@ -127,13 +123,34 @@ exports.deleteById = async (req, res) => {
     if(user){
       const book = await Books.findOne({where: {id: id, userId: user.id}});
       if(book){
+        const file = await Images.findOne({where: {bookId: book.id}});
+        if(file){
+            const s3 = new aws.S3();
+            var s3Params = {
+                Bucket: config.AWS_BUCKET_NAME,
+                Key: file.file_name
+            };
+            s3.deleteObject(s3Params,function(err){
+                if(err){
+                    res.status(400).send({
+                        status: 400,
+                        message: "Error occured in deleting from S3"
+                    });
+                }else{
+                    res.status(204).send();
+                }
+            })
+            await Images.destroy({where: {bookId: book.id}});
+        }else{
+            return res.status(404).send({
+                message : "No such Image exists with logged in user and its books"
+            });
+        }
         await Books.destroy({where: {id: id, userId: user.id}});
-        return res.status(200).send({
-          message : "Book deleted successfully!!"
-        });
+        return res.status(204);
       }else{
         return res.status(404).send({
-          message : "No such Book exists."
+          message : "No such Book exists Or hte user logged in not the owner of the book with which Image is attached"
         });
       }
     }
