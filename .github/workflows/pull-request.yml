@@ -67,5 +67,5 @@ jobs:
         --deployment-config-name CodeDeployDefault.AllAtOnce \
         --deployment-group-name csye6225-webapp-deployment \
         --description "My webapp" \
-        --s3-location bucket=codedeploy.app,bundleType=zip,key=codedeploy_artifact.zip
+        --s3-location bucket=codedeploy.app,bundleType=zip,key=codedeploy_artifacts.zip
         
