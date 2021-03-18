@@ -52,7 +52,7 @@ jobs:
         mkdir codedeploy_artifacts
         cd ~/codedeploy_artifacts
         ls -al
-        cp -r /home/runner/work/webapp-1/webapp-1 ~/codedeploy_artifacts
+        cp -r /home/runner/work/webapp/webapp ~/codedeploy_artifacts
         pwd
         ls -al
         zip -r ~/codedeploy_artifacts
