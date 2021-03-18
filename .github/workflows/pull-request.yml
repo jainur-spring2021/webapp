@@ -56,7 +56,7 @@ jobs:
         pwd
         ls -al
         zip -r ~/codedeploy_artifacts.zip  ~/codedeploy_artifacts
-        aws s3 cp ~/codedeploy_artifacts.zip s3://codedeploy.app --sse
+        aws s3 cp ~/codedeploy_artifacts.zip s3://codedeploy.api --sse
 
     - name: Deploy code
       run: |
@@ -67,5 +67,5 @@ jobs:
         --deployment-config-name CodeDeployDefault.AllAtOnce \
         --deployment-group-name csye6225-webapp-deployment \
         --description "My webapp" \
-        --s3-location bucket=codedeploy.app,bundleType=zip,key=codedeploy_artifacts.zip
+        --s3-location bucket=codedeploy.api,bundleType=zip,key=codedeploy_artifacts.zip
         
