@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Application stop"
 
 sudo npm install
