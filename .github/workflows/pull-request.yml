@@ -55,6 +55,6 @@ jobs:
         cp -r /home/runner/work/webapp/webapp ~/codedeploy_artifacts
         pwd
         ls -al
-        zip -r ~/codedeploy_artifacts
+        zip -r ~/codedeploy_artifacts.zip  ~/codedeploy_artifacts
         aws s3 cp ~/codedeploy_artifacts.zip s3://codedeploy.app --sse
         
