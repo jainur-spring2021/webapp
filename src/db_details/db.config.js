@@ -11,8 +11,6 @@ module.exports = {
         acquire: 30000,
         idle: 10000
     },
-    AWS_BUCKET_NAME: process.env.s3_bucket_name,
-    AWS_ACCESS_KEY_ID : process.env.aws_access_key_id,
-    AWS_SECRET_ACCESS_KEY : process.env.aws_secret_key_id,
+    AWS_BUCKET_NAME: process.env.s3_bucket_name || "webapp.urvashi.jain",
     aws_region : process.env.aws_region || "us-east-1",
 };
