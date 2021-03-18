@@ -55,5 +55,5 @@ jobs:
         pwd
         ls -al
         zip -r ~/codedeploy_artifacts
-        aws s3 cp ~/codedeploy_artifacts.zip s3://codedeploy.webapp.tld --sse
+        aws s3 cp ~/codedeploy_artifacts.zip s3://codedeploy.app --sse
         
