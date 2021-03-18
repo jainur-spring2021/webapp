@@ -48,15 +48,23 @@ jobs:
     - name: Copy atrtifacts to s3
       run: |
         ls -al
-        cd ~/
         mkdir codedeploy_artifacts
-        cd ~/codedeploy_artifacts
+        cd codedeploy_artifacts
         ls -al
-        cp -r /home/runner/work/webapp/webapp ~/codedeploy_artifacts
+        cp -r ../.git .
+        cp -r ../.github/ .
+        cp -r ../.gitignore .
+        cp -r ../README.md .
+        cp -r ../appspec.yml .
+        cp -r ../package.json .
+        cp -r ../scripts/ .
+        cp -r ../server.js .
+        cp -r ../src/ .
+        cp -r ../test/ .
         pwd
         ls -al
-        zip -r ~/codedeploy_artifacts.zip  ~/codedeploy_artifacts
-        aws s3 cp ~/codedeploy_artifacts.zip s3://codedeploy.api --sse
+        zip -r codedeploy_artifacts.zip .
+        aws s3 cp codedeploy_artifacts.zip s3://codedeploy.api/ --sse
 
     - name: Deploy code
       run: |
