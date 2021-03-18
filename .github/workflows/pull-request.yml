@@ -1,0 +1,59 @@
+name: Node.js CI
+
+on: 
+  pull_request: 
+   branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    
+    strategy:
+      matrix:
+        node-version: [14.x]
+    
+    steps: 
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+          node-version: '14.x'
+
+    - name: build 
+      run: |
+            ls
+            npm install
+
+    - name: test
+      run: |
+          npm install pm2 -g
+          npm test
+
+    - name: Build Artifacts
+      run: |
+          ls -al
+          cd ~/
+          sudo apt install wget zip unzip curl -y
+          sudo apt install unzip -y
+          pwd
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install --update -i /usr/local/aws-cli -b /usr/local/bin
+          ls -al
+          aws configure set default.region us-east-1
+          aws configure set aws_access_key_id ${{ secrets.USER_AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.USER_AWS_SECRET_ACCESS_KEY }}
+
+    - name: Copy atrtifacts to s3
+      run: |
+        ls -al
+        cd ~/
+        mkdir codedeploy_artifacts
+        cd ~/codedeploy_artifacts
+        ls -al
+        cp -r /home/runner/work/webapp-1/webapp-1 ~/codedeploy_artifacts
+        pwd
+        ls -al
+        zip -r ~/codedeploy_artifacts
+        aws s3 cp ~/codedeploy_artifacts.zip s3://codedeploy.webapp.tld --sse
+        

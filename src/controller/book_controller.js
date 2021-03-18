@@ -141,10 +141,6 @@ exports.deleteById = async (req, res) => {
                 }
             })
             await Images.destroy({where: {bookId: book.id}});
-        }else{
-            return res.status(404).send({
-                message : "No such Image exists with logged in user and its books"
-            });
         }
         await Books.destroy({where: {id: id, userId: user.id}});
         return res.status(204);

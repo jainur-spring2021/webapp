@@ -37,6 +37,7 @@ exports.uploadImage = async (req, res) => {
                             message: "Image Successfully added ",
                             data: req.files,
                             iamge : image
+                        })
                     })
                     .catch(err => {
                         res.status(400).send({
@@ -44,7 +45,6 @@ exports.uploadImage = async (req, res) => {
                             err.message || "Some error occurred while creating the Users."
                         });
                     })
-                    });  
                 }
             });
         }else{
