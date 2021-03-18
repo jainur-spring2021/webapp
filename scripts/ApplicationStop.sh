@@ -1,5 +1,6 @@
-echo "Application stop"
+#!/bin/bash
 
-sudo npm install
-sudo pm2 stop --name testServer
-sudo pm2 delete testServer
+echo "Application stop"
+pm2 delete server || true
+sudo pm2 delete all
+sudo rm -rf /home/ubuntu/*
