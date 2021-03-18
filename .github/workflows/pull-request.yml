@@ -62,5 +62,10 @@ jobs:
       run: |
         pwd 
         cd ~/
-        aws deploy create-deployment --output json --application-name csye6225-webapp [--deployment-group-name csye6225-webapp-deployment] [--deployment-config-name CodeDeployDefault.AllAtOnce] [--revision S3] [--s3-location --bucket codedeploy.app --key codedeploy_artifact.zip --bundleType zip}]
+        aws deploy create-deployment \
+        --application-name csye6225-webapp \
+        --deployment-config-name CodeDeployDefault.AllAtOnce \
+        --deployment-group-name csye6225-webapp-deployment \
+        --description "My webapp" \
+        --s3-location bucket=codedeploy.app,bundleType=zip,key=codedeploy_artifact.zip
         
