@@ -7,16 +7,16 @@ files:
 
 hooks:
   AfterInstall:
-   - location: scripts/AfterInstall.sh
-     timeout: 180
-     runas: centos
+    - location: scripts/AfterInstall.sh
+      timeout: 180
+      runas: ubuntu
 
-    Application Start:
-  - location: scripts/ApplicationStart.sh
-    timeout: 180
-    runas: centos
+  Application Start:
+    - location: scripts/ApplicationStart.sh
+      timeout: 180
+      runas: ubuntu
 
-    Application Stop:
-  - location: scripts/ApplicationStop.sh
-    timeout: 180
-    runas: centos
+  Application Stop:
+    - location: scripts/ApplicationStop.sh
+      timeout: 180
+      runas: ubuntu
