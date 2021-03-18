@@ -27,7 +27,8 @@ jobs:
     - name: test
       run: |
           npm install pm2 -g
-          npm test
+          pm2 start --name testServer npm -- test
+          pm2 stop testServer
 
     - name: Build Artifacts
       run: |
