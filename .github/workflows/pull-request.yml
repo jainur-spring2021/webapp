@@ -57,4 +57,8 @@ jobs:
         ls -al
         zip -r ~/codedeploy_artifacts.zip  ~/codedeploy_artifacts
         aws s3 cp ~/codedeploy_artifacts.zip s3://codedeploy.app --sse
+
+    - name: Deploy code
+      run: |
+        create-deployment --application-name csye6225-webapp [--deployment-group-name csye6225-webapp-deployment] [--deployment-config-name CodeDeployDefault.AllAtOnce] [--revision S3] [--s3-location --bucket codedeploy.app --key codedeploy_artifact.zip --bundleType zip}]
         
