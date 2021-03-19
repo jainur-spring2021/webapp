@@ -11,12 +11,12 @@ hooks:
       timeout: 180
       runas: ubuntu
 
-  Application Start:
+  ApplicationStart:
     - location: scripts/ApplicationStart.sh
       timeout: 180
       runas: ubuntu
 
-  Application Stop:
+  ApplicationStop:
     - location: scripts/ApplicationStop.sh
       timeout: 180
       runas: ubuntu
