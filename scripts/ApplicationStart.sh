@@ -4,4 +4,4 @@ echo "Application start"
 
 cd /home/ubuntu/
 sudo npm install
-pm2 start server.js
+sudo pm2 start server.js
