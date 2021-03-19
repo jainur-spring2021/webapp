@@ -2,8 +2,8 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
-    destination: /home/ubuntu
+  - source: /home/ubuntu
+    destination: /home/ubuntu/webapp
 
 hooks:
   AfterInstall:
