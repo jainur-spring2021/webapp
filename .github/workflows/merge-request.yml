@@ -1,0 +1,64 @@
+name: Deploy webApp
+
+on: 
+  push: 
+   branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    
+    steps: 
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+          node-version: '14.x'
+    
+    - name: Build Artifacts
+      run: |
+          ls -al
+          cd ~/
+          sudo apt install wget zip unzip curl -y
+          sudo apt install unzip -y
+          pwd
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install --update -i /usr/local/aws-cli -b /usr/local/bin
+          ls -al
+          aws configure set default.region us-east-1
+          aws configure set aws_access_key_id ${{ secrets.USER_AWS_ACCESS_KEY }}
+          aws configure set aws_secret_access_key ${{ secrets.USER_AWS_SECRET_KEY }}
+
+    - name: Copy atrtifacts to s3
+      run: |
+        ls -al
+        mkdir codedeploy_artifacts
+        cd codedeploy_artifacts
+        ls -al
+        cp -r ../.git .
+        cp -r ../.github/ .
+        cp -r ../.gitignore .
+        cp -r ../README.md .
+        cp -r ../appspec.yml .
+        cp -r ../package.json .
+        cp -r ../scripts/ .
+        cp -r ../server.js .
+        cp -r ../src/ .
+        cp -r ../test/ .
+        pwd
+        ls -al
+        zip -r codedeploy_artifacts.zip .
+        aws s3 cp codedeploy_artifacts.zip s3://codedeploy.api/ --sse
+
+    - name: Deploy code
+      run: |
+        pwd 
+        cd ~/
+        aws deploy create-deployment \
+        --application-name csye6225-webapp \
+        --deployment-config-name CodeDeployDefault.AllAtOnce \
+        --deployment-group-name csye6225-webapp-deployment \
+        --description "My webapp" \
+        --s3-location bucket=codedeploy.api,bundleType=zip,key=codedeploy_artifacts.zip
+        
