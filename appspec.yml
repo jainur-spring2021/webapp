@@ -3,20 +3,20 @@ os: linux
 
 files:
   - source: ./
-    destination: /home/ubuntu
+    destination: /home/ubuntu/
 
 hooks:
   AfterInstall:
     - location: scripts/AfterInstall.sh
       timeout: 180
-      runas: ubuntu
+      runas: root
 
-  Application Start:
+  ApplicationStart:
     - location: scripts/ApplicationStart.sh
       timeout: 180
-      runas: ubuntu
+      runas: root
 
-  Application Stop:
+  ApplicationStop:
     - location: scripts/ApplicationStop.sh
       timeout: 180
-      runas: ubuntu
+      runas: root
