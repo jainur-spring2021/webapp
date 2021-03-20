@@ -20,33 +20,40 @@ exports.uploadImage = async (req, res) => {
     if(user){
         const book = await Book.findOne({where: {id: req.params.id, userId: user.id}});
         if(book){
-            
-            singleUpload(req, res, function (err, data) {
-                if (err) {
-                    return res.status(422).send({ errors: [{ title: 'File Upload Error', detail: err.message }]});
-                }else{
-                    var image = {
-                        file_name: req.files[0].metadata.fileName,
-                        s3_object_name: req.files[0].metadata.s3_object_name,
-                        file_id: uuid.v1(),
-                        bookId: req.params.id,
-                    }
-                    Images.create(image)
-                    .then(data => {
-                        res.status(200).send({
-                            message: "Image Successfully added ",
-                            data: req.files,
-                            iamge : image
+            const file = await Images.findOne({where: {bookId: book.id}});
+            if(!file){
+                singleUpload(req, res, function (err, data) {
+                    if (err) {
+                        return res.status(422).send({ errors: [{ title: 'File Upload Error', detail: err.message }]});
+                    }else{
+                        var image = {
+                            file_name: req.files[0].metadata.fileName,
+                            s3_object_name: req.files[0].metadata.s3_object_name,
+                            file_id: uuid.v1(),
+                            bookId: req.params.id,
+                        }
+                        Images.create(image)
+                        .then(data => {
+                            res.status(200).send({
+                                message: "Image Successfully added ",
+                                data: req.files,
+                                iamge : image
+                            })
                         })
-                    })
-                    .catch(err => {
-                        res.status(400).send({
-                            message:
-                            err.message || "Some error occurred while creating the Users."
-                        });
-                    })
-                }
-            });
+                        .catch(err => {
+                            res.status(400).send({
+                                message:
+                                err.message || "Some error occurred while creating the Users."
+                            });
+                        })
+                    }
+                });
+            }
+            else{
+                res.status(400).send({
+                    message: "Book already have images"
+                });
+            }
         }else{
             res.status(400).send({
                 message: "User is not the owner of the book"
