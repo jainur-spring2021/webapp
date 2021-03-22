@@ -8,7 +8,7 @@ Step 1: Clone git repository and run 'npm init' to intialize the repository.\
 Step 2: Run 'npm install' to install all the dependencies specified in package.json\
 Step 3: Before starting the node server, start Mysql services.\
 Step 4: Run 'node server.js to start the server'\
-Step 5: Start Postman and hit the enpoints:\
+Step 5: Start Postman and hit the enpoints:
 
 # Assignment 1 Endpoints:
 POST localhost:3000/api/users \
