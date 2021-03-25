@@ -24,7 +24,7 @@
             "timezone": "Local"
             },
             {
-            "file_path": "/home/ubuntu/.pm2/logs/server-out.log",
+            "file_path": "/root/.pm2/logs/server-out.log",
             "log_group_name": "csye6225",
             "log_stream_name": "webapp",
             "timezone": "Local"
