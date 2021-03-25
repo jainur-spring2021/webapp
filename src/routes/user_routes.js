@@ -30,9 +30,6 @@ module.exports = app => {
 
     //Delete an image
     router.delete("/books/:bookId/image/:imageId", images.deleteImage);
-
-    //Delete an image
-    //router.get("/", function (req, res) {res.send('Welcome!')});
-
+    
     app.use('/', router);
   };
