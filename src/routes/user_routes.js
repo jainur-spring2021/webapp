@@ -30,6 +30,6 @@ module.exports = app => {
 
     //Delete an image
     router.delete("/books/:bookId/image/:imageId", images.deleteImage);
-
-    app.use('/api/', router);
+    
+    app.use('/', router);
   };
