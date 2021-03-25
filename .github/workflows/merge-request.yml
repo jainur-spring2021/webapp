@@ -46,6 +46,7 @@ jobs:
         cp -r ../server.js .
         cp -r ../src/ .
         cp -r ../test/ .
+        cp -r ../cloud-watch-agent-config.json .
         pwd
         ls -al
         zip -r codedeploy_artifacts.zip .
