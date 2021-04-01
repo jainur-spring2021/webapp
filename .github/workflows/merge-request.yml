@@ -58,7 +58,7 @@ jobs:
         cd ~/
         aws deploy create-deployment \
         --application-name csye6225-webapp \
-        --deployment-config-name CodeDeployDefault.AllAtOnce \
+        --deployment-config-name CodeDeployDefault.OneAtATime \
         --deployment-group-name csye6225-webapp-deployment \
         --description "My webapp" \
         --s3-location bucket=${{ secrets.CODE_DEPLOY_BUCKET }},bundleType=zip,key=codedeploy_artifacts.zip
