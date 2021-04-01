@@ -30,6 +30,9 @@ module.exports = app => {
 
     //Delete an image
     router.delete("/books/:bookId/image/:imageId", images.deleteImage);
+
+    //Health Check endpoint
+    router.get("/health", users.healthCheck);
     
     app.use('/', router);
   };

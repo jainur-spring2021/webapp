@@ -206,3 +206,9 @@ exports.update = async (req, res) => {
     });
   };
 };
+
+exports.healthCheck = (req, res) => {
+  res.status(200).send({
+    message : "Checked"
+  });
+};

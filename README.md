@@ -24,3 +24,5 @@ DELETE    localhost:3000/api/books/:id
 # Assignment 4 endpoints
 POST  localhost:3000/api/books/:id/images \
 DELETE    localhost:3000/api/books/:bookId/images/:imageId
+
+# update
