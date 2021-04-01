@@ -206,3 +206,7 @@ exports.update = async (req, res) => {
     });
   };
 };
+
+exports.healthCheck = (res, req) => {
+  res.status(200).send();
+};
