@@ -13,5 +13,5 @@ module.exports = {
     },
     AWS_BUCKET_NAME: process.env.s3_bucket_name || "webapp.urvashi.jain",
     aws_region : process.env.aws_region || "us-east-1",
-    TOPIC_ARN : process.env.topic_name || "arn:aws:sns:us-east-1:655716329164:Test"
+    TOPIC_ARN : process.env.topic_arn || "arn:aws:sns:us-east-1:655716329164:user-notifications-topic"
 };
