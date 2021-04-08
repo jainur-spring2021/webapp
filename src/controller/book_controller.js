@@ -5,6 +5,7 @@ const User = db.users;
 const Images = db.images;
 const config = require("../db_details/db.config.js");
 const aws = require('aws-sdk');
+aws.config.update({region: config.aws_region});
 
 // Create a new book
 exports.create = async (req, res) => {
