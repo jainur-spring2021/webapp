@@ -163,7 +163,22 @@ exports.deleteById = async (req, res) => {
             })
             await Images.destroy({where: {bookId: book.id}});
         }
-        await Books.destroy({where: {id: id, userId: user.id}});
+        Books.destroy({where: {id: id, userId: user.id}});
+        params.Message = 'Dear '+ user.name +'<br><br> Greetings of the day!</br></br><br><br> Thank you for using BooksBuffet.me. The book with following details is deleted: </br></br> <br>Name: '+ book.title +'</br><br> ISBN: '+ book.isbn +'</br><br> Author: '+ book.author +'</br><br> Publish Date: '+ book.published_date +'</br><br> Hope you are enjoying using BooksBuffet.me. </br><br> <br> Best, <br> BooksBuffet </br></br><br> <br> <br> unsubscribe To unsubscribe click on this link </br></br></br>'
+        // Create promise and SNS service object
+        var publishTextPromise = new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
+
+        // Handle promise's fulfilled/rejected states
+        publishTextPromise.then(
+        function(data) {
+          console.log(`Message ${params.Message} sent to the topic ${params.TopicArn}`);
+          console.log("MessageID is " + data.MessageId);
+        }).catch(
+          function(err) {
+          console.log("error in publishing");
+          console.log(err, err.stack);
+          console.error(err, err.stack);
+        });
         res.status(204).send();
       }else{
         return res.status(404).send({
