@@ -6,6 +6,11 @@ const Images = db.images;
 const config = require("../db_details/db.config.js");
 const aws = require('aws-sdk');
 aws.config.update({region: config.aws_region});
+// Create publish parameters
+var params = {
+  Message: '',
+  TopicArn: config.TOPIC_ARN,
+};
 
 // Create a new book
 exports.create = async (req, res) => {
@@ -64,14 +69,9 @@ exports.create = async (req, res) => {
       userId : user.id
     };
     
-    // Create publish parameters
-    var params = {
-      Message: 'Book created',
-      TopicArn: 'arn:aws:sns:us-east-1:655716329164:Test'
-    };
-
     Books.create(book)
     .then(book => {
+      params.Message = 'Dear '+ user.username +'<br><br> Greetings of the day!</br></br><br><br> Thank you for using BooksBuffet.me. The book with following details is created: </br></br> <br>Name: '+ book.title +'</br><br> ISBN: '+ book.isbn +'</br><br> Author: '+ book.author +'</br><br> Publish Date: '+ book.published_date +'</br><br> Hope you are enjoying using BooksBuffet.me. </br><br> <br> Best, <br> BooksBuffet </br></br><br> <br> <br> unsubscribe To unsubscribe click on this link </br></br></br>'
       // Create promise and SNS service object
       var publishTextPromise = new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
 
@@ -164,10 +164,10 @@ exports.deleteById = async (req, res) => {
             await Images.destroy({where: {bookId: book.id}});
         }
         await Books.destroy({where: {id: id, userId: user.id}});
-        return res.status(204);
+        res.status(204).send();
       }else{
         return res.status(404).send({
-          message : "No such Book exists Or hte user logged in not the owner of the book with which Image is attached"
+          message : "No such Book exists or the user logged in not the owner of the book with which Image is attached"
         });
       }
     }
