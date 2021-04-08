@@ -82,6 +82,7 @@ exports.create = async (req, res) => {
       }).catch(
         function(err) {
         console.log("error in publishing");
+        console.log(err, err.stack);
         console.error(err, err.stack);
       });
       res.status(200).json({
