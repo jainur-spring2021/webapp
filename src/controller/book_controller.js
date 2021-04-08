@@ -65,6 +65,25 @@ exports.create = async (req, res) => {
     
     Books.create(book)
     .then(book => {
+      // Create publish parameters
+      var params = {
+        Message: 'Book created',
+        TopicArn: 'arn:aws:sns:us-east-1:655716329164:Test'
+      };
+
+      // Create promise and SNS service object
+      var publishTextPromise = new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
+
+      // Handle promise's fulfilled/rejected states
+      await publishTextPromise.then(
+      function(data) {
+        console.log(`Message ${params.Message} sent to the topic ${params.TopicArn}`);
+        console.log("MessageID is " + data.MessageId);
+      }).catch(
+        function(err) {
+        console.log("error in publishing");
+        console.error(err, err.stack);
+      });
       res.status(200).json({
           message :  `Book created successfully with title: ${book.title}`,
           book: book
@@ -80,24 +99,6 @@ exports.create = async (req, res) => {
           message: err.message || "Error occurred while creating the user."
         });
       }
-    });
-    // Create publish parameters
-    var params = {
-      Message: 'MESSAGE_TEXT',
-      TopicArn: 'arn:aws:sns:us-east-1:655716329164:Test'
-    };
-
-    // Create promise and SNS service object
-    var publishTextPromise = new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
-
-    // Handle promise's fulfilled/rejected states
-    await publishTextPromise.then(
-    function(data) {
-      console.log(`Message ${params.Message} sent to the topic ${params.TopicArn}`);
-      console.log("MessageID is " + data.MessageId);
-    }).catch(
-      function(err) {
-      console.error(err, err.stack);
     });
 };
 
