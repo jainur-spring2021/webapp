@@ -64,19 +64,19 @@ exports.create = async (req, res) => {
       userId : user.id
     };
     
-    Books.create(book)
-    .then(async book => {
-      // Create publish parameters
-      var params = {
-        Message: 'Book created',
-        TopicArn: 'arn:aws:sns:us-east-1:655716329164:Test'
-      };
+    // Create publish parameters
+    var params = {
+      Message: 'Book created',
+      TopicArn: 'arn:aws:sns:us-east-1:655716329164:Test'
+    };
 
+    Books.create(book)
+    .then(book => {
       // Create promise and SNS service object
       var publishTextPromise = new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
 
       // Handle promise's fulfilled/rejected states
-      await publishTextPromise.then(
+      publishTextPromise.then(
       function(data) {
         console.log(`Message ${params.Message} sent to the topic ${params.TopicArn}`);
         console.log("MessageID is " + data.MessageId);
