@@ -64,7 +64,7 @@ exports.create = async (req, res) => {
     };
     
     Books.create(book)
-    .then(book => {
+    .then(async book => {
       // Create publish parameters
       var params = {
         Message: 'Book created',
