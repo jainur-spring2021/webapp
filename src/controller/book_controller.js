@@ -71,7 +71,7 @@ exports.create = async (req, res) => {
     
     Books.create(book)
     .then(book => {
-      params.Message = 'Dear '+ user.username +' <br><br> Greetings of the day!</br></br><br><br> Thank you for using BooksBuffet.me. The book with following details is created: </br></br> <br>Name: '+ book.title +'</br><br> ISBN: '+ book.isbn +'</br><br> Author: '+ book.author +'</br><br> Publish Date: '+ book.published_date +'</br><br> Hope you are enjoying using BooksBuffet.me. </br><br> <br> Best, <br> BooksBuffet </br></br><br> <br> <br> unsubscribe To unsubscribe click on this link </br></br></br>'
+      params.Message = 'Dear '+ user.username +' <br><br> Greetings of the day!</br></br><br><br> Thank you for using BooksBuffet.me. The book with following details is created: </br></br> <br>Name: '+ book.title +'</br><br> ISBN: '+ book.isbn +'</br><br> Author: '+ book.author +'</br><br> Publish Date: '+ book.published_date +'<br>Details can be found at prod.booksbuffet.me/books/:'+book.id+' </br></br><br> Hope you are enjoying using BooksBuffet.me. </br><br> <br> Best, <br> BooksBuffet </br></br><br> <br> <br> To unsubscribe click on this link </br></br></br>'
       // Create promise and SNS service object
       var publishTextPromise = new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
 
@@ -163,8 +163,9 @@ exports.deleteById = async (req, res) => {
             })
             await Images.destroy({where: {bookId: book.id}});
         }
+        
+        params.Message = 'Dear '+ user.username +' <br><br> Greetings of the day!</br></br><br><br> Thank you for using BooksBuffet.me. The book with following details is deleted: </br></br> <br>Name: '+ book.title +'</br><br> ISBN: '+ book.isbn +'</br><br> Author: '+ book.author +'</br><br> Publish Date: '+ book.published_date +'</br><br> Hope you are enjoying using BooksBuffet.me. </br><br> <br> Best, <br> BooksBuffet </br></br><br> <br> <br> To unsubscribe click on this link </br></br></br>'
         Books.destroy({where: {id: id, userId: user.id}});
-        params.Message = 'Dear '+ user.name +' <br><br> Greetings of the day!</br></br><br><br> Thank you for using BooksBuffet.me. The book with following details is deleted: </br></br> <br>Name: '+ book.title +'</br><br> ISBN: '+ book.isbn +'</br><br> Author: '+ book.author +'</br><br> Publish Date: '+ book.published_date +'</br><br> Hope you are enjoying using BooksBuffet.me. </br><br> <br> Best, <br> BooksBuffet </br></br><br> <br> <br> unsubscribe To unsubscribe click on this link </br></br></br>'
         // Create promise and SNS service object
         var publishTextPromise = new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
 
